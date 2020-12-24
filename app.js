@@ -7,7 +7,11 @@ var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+var fournisseurRouter = require('./routes/fournisseur');
+var clientRouter = require('./routes/client');
+var produitsRouter = require('./routes/produits');
+var categorieRouter = require('./routes/categorie');
+var packRouter = require('./routes/pack');
 var app = express();
 
 
@@ -20,6 +24,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/fournisseur', fournisseurRouter);
+app.use('/client', clientRouter);
+app.use('/produits', produitsRouter);
+app.use('/categorie', categorieRouter);
+app.use('/pack', packRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -40,7 +50,7 @@ mongoose.connect('mongodb://localhost:27017/mybase', {useNewUrlParser: true, use
     console.log("connected to database");
     app.listen(3000)
 }).catch(err => {
-    console.log(err);
+    console.log(err);np
   });  
 
 
