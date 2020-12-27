@@ -3,7 +3,6 @@ const express = require('express')
 var router = express.Router();
 var Client = require("../models/client");
 const nodemailer = require("nodemailer");
-// const User = require('../models/client')
 var fs = require("fs");
 var ejs = require("ejs");
 require('dotenv').config();
@@ -22,11 +21,22 @@ router.post("/addClient", (req, res, next) => {
   });
 });
 
+router.get("/getAllClient", (req, res, next) => {
+  Client.find().then((getClient) => {
+  res.status(200).json({
+      message: "get all client",
+      client: getClient,
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+});
 router.get("/getClient/:id", (req, res, next) => {
   Client.findById(req.params.id).then((clientById) => {
     res.status(200).json({
         message: "get client",
-        user: clientById,
+        client: clientById,
       })
       .catch((err) => {
         console.log(err);
@@ -34,55 +44,53 @@ router.get("/getClient/:id", (req, res, next) => {
   });
 });
 
-// router.post('/addFavoritClient', async (req,res,next)=>{
-  
-//   const FavoritClient = await Client.findOne(req.body.favoritClient);
-//   if (FavoritClient)
-//     return res.status(400).send({ message: "it does not belong to the favorites list" });
-//     await client.save();
-//     res.send(client);
-  
-// })
+router.get("/getFavoritClient/:id", async (req,res,next)=>{
+  const client = await Client.findById(req.params.id);
+  if (client.favoritClient===true){
+    res.send(client);
+  }else{
+    return res.status(400).send({ message: "it does not belong to the favorites list" });
+  }
+})
+
 router.put('/updateClient/:id', async (req,res,next)=>{
-  const updateClient = await User.findByIdAndUpdate(req.params.id,req.body);
+  const updateClient = await Client.findByIdAndUpdate(req.params.id,req.body);
   res.json(updateClient)
 })
 
 router.delete('/deleteClient/:id', async(req,res,next)=>{
-  const deleteClient =   await User.findByIdAndDelete(req.params.id);
+  const deleteClient =   await Client.findByIdAndDelete(req.params.id);
   res.json(deleteClient);  
   })
   
-exports.sendEmail= (clientId)=>{
-  return async  (req,res)=>{
-    let client = await User.findById(clientId)
-  // Step 1
-  let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        client: process.env.EMAIL || 'your email', 
-        pass: process.env.PASSWORD || 'your password' 
-    }
-  });
-  // Step 2
-  let mailOptions = {
-    from: 'emna@gmail.com',
-    to: user.email, 
-    subject: 'Nodemailer - Test',
-    text: 'it work!!'
-  };
-  // Step 3
-  transporter.sendMail(mailOptions, (err, data) => {
-    if (err) {
-        res.json(err);
-        console.log(err);
-    }
-    console.log("email sent");
-    return res.json("Email sent!")
-  });
-} 
-};
 
+router.post('/:id',async (req,res,next)=>{
+  const user = await User.findById(req.params.id)
+  let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+               client: process.env.EMAIL || 'your email', 
+               pass: process.env.PASSWORD || 'your password' 
+      }
+    });
+   
+    let mailOptions = {
+      from: 'emna.hamdi.adressemail@gmail.com',
+      to: user.email,
+      port: 587, 
+      secure: false,
+      text: 'emna hamdi',
+      html: "<h1>HTML version </h1>"
+    };
+
+    transporter.sendMail(mailOptions, (err, data) => {
+      if (err) {
+          res.json(err);
+          console.log(err);
+      }
+      return res.json("Message sent")
+    });
+})
 
 
 
