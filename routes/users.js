@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const jwtsecure = require ("../jwtsecure/jwt");
+const nodemailer = require("nodemailer");
 
 var User = require('../models/user');
 /* GET users listing. */
@@ -12,6 +13,38 @@ router.get('/', function(req, res, next) {
 router.post('/addUser',(req,res,next)=>{
   const user = new User(req.body)
   user.save().then((createdUser)=>{
+/***************** */
+async function main() {
+
+  var transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+  port: 587,
+  secure: false, // true for 465, false for other ports
+    service: 'gmail',
+    auth: {
+      user: 'mahdilallehom@gmail.com',
+      pass: '123456789azertymahdi'
+    }
+  });
+
+  let info = await transporter.sendMail({
+    from: ' <mahdilallehom@gmail.com>', // sender address
+    to:createdUser.email , // list of receivers
+    subject: "Hello : "+createdUser.firstName, // Subject line
+    text: "your adress : "+createdUser.email+"your password : "+createdUser.password , // plain text body
+ 
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+}
+
+main().catch(console.error);
+/********* */
     console.log("user created");
     res.status(201).json({
       message: "user created",
