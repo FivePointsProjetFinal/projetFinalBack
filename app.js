@@ -44,7 +44,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.json('error');
+  res.json(err);
 });
 mongoose.connect('mongodb://localhost:27017/mybase', {useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
     console.log("connected to database");
