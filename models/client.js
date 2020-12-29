@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
 
 const ClientSchema = new mongoose.Schema({
-  nom: { type: String, required: true },
-  prenom: { type: String, required: true },
-  mot_de_pass: { type: String, select: false },
-  email: { type: String },
-  type_client: { type: String },
-  adresse: { type: String, required: true },
-  mode_de_payement: { type: String, required: true },
+  nameClient : { type: String, required: true },
+  telpClient  : { type: String, required: true },
+  faxClient : { type: String, required: true },
+  adresseClient : { type: String, select: false },
+  emailClient : { type: String },
+  modepaimentClient : { type: String },
+  villeClient : { type: String, required: true },
+  typeClient : { type: String, required: true },
   favoritClient: { type: Boolean, default: false  },
   refClient: { type: String, required: true },
 });

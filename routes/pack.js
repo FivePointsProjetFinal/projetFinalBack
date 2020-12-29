@@ -2,7 +2,7 @@ var express = require("express");
 const app = require("../app");
 var router = express.Router();
 const mongoose = require("mongoose");
-var Pack = require("../models/pack");
+var Pack = require("../models/pack");.0
 var Produit =require('../models/produits')
 
 router.post("/addPack", (req, res, next) => {
