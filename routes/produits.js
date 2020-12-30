@@ -59,7 +59,7 @@ router.get( "/:idCategotie",async (req, res) => {
     }
   );
   router.get( "/:idCategotie",async (req, res) => {
-    const requeteProduit = Produit.find({ categorie: req.params.idCategorie }).populate('categorie');
+    const requeteProduit = Produit.find({ categorie: req.params.idCat }).populate('categorie');
       const produit = await requeteProduit;
       res.send({ produits: produit});
 
